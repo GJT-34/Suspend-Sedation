@@ -2,7 +2,7 @@
 
 This involves some minor changes to the 'suspend-sedation' systemd service, which is an alternative to the 'suspend-then-hibernate' function. 
 
-This service solved a problem I encountered in which my Dell XPS 9310 (running Ubuntu 22.04) could enter and exit both suspend and hibernate, but would fail to properly execute suspend-then-hibernate. I wanted to use suspend-then-hibernate because it would combine the speed of suspend mode with the power-savings of hibernation. My laptop goes into and out of suspend quickly, but suspend will significantly drain my battery if left in that state for an extended period. Hibernation is slower, but saves battery power. (Like many newer laptops, mine does not have a suspend function that equates to 'deep sleep.')
+This service solved a problem I encountered in which my Dell XPS 9310 (running Ubuntu 22.04) could enter and exit both suspend and hibernate, but would fail to properly execute suspend-then-hibernate. I wanted to use suspend-then-hibernate because it would combine the speed of suspend mode with the power savings of hibernation. My laptop goes into and out of suspend quickly, but suspend will significantly drain my battery if left in that state for an extended period. Hibernation is slower, but saves battery power. (Like many newer laptops, mine does not have a suspend function that equates to 'deep sleep.')
 
 Like suspend-then-hibernate, the service will wake up a laptop out of suspend mode after a set number of seconds--defined by the ALARM_SEC variable in the script--and go into hibernation. In my case, that variable is set to 21600 seconds, which is six hours. The service starts on boot, so it's ready when needed.
 
