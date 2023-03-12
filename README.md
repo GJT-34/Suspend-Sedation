@@ -15,9 +15,10 @@ There are links with additional background in the script itself.
 - Copy the contents of the suspend-sedation.service from this repository into the new file.
 - Change the number of seconds in the ALARM_SEC variable if you want the laptop to exit suspend and enter hibernation at some point other than the six hour mark. For instance, while testing it out you may wish to set it to 30 seconds, to quickly see if it's working as advertised. 
 - Save the file.
-- In a terminal, enter the following commands to immediately start the new service, enable it at system startup, and check its status:
+- In a terminal, enter the following commands to reload service files, immediately start the new service, check its status, and enable it at system startup:
 ```
+sudo systemctl daemon-reload
 sudo systemctl start suspend-sedation.service
-sudo systemctl enable suspend-sedation.service 
 sudo systemctl status suspend-sedation.service
+sudo systemctl enable suspend-sedation.service
 ```
