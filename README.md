@@ -1,4 +1,4 @@
-# Suspend-Sedation
+# Using the Suspend-Sedation Service for Convenience and to Conserve Battery Power
 
 This involves some minor changes to the 'suspend-sedation' systemd service, which is an alternative to the 'suspend-then-hibernate' function. 
 
