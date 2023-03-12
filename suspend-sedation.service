@@ -1,0 +1,44 @@
+# save as: /etc/systemd/system/suspend-sedation.service
+# reload service files to include this service: sudo systemctl daemon-reload
+# start the service: sudo systemctl start suspend-sedation.service
+# check its status: sudo systemctl status suspend-sedation.service
+# enable at startup: sudo systemctl enable suspend-sedation.service
+
+[Unit]
+Description=Suspend Sedation
+Documentation=https://bbs.archlinux.org/viewtopic.php?pid=1420279
+Documentation=https://bbs.archlinux.org/viewtopic.php?pid=1574125
+Documentation=https://wiki.archlinux.org/index.php/Power_management
+Documentation=http://forums.debian.net/viewtopic.php?f=5&t=129088
+Documentation=https://wiki.debian.org/SystemdSuspendSedation
+Conflicts=hibernate.target hybrid-sleep.target
+Before=sleep.target
+StopWhenUnneeded=true
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+Environment="ALARM_SEC=21600"
+ExecStart=/usr/sbin/rtcwake --seconds $ALARM_SEC --auto --mode no
+ExecStop=/usr/bin/bash -c '\
+sleep 3; \
+ALARM=$(cat /sys/class/rtc/rtc0/wakealarm); \
+NOW=$(date +%s); \
+BATRY=$(echo /sys/class/power_supply/BAT*); \
+BAT_STATUS=$(tail "$BATRY/status"); \
+if [[ -z "$ALARM" ]] || [[ "$NOW" -ge "$ALARM" ]]; then \
+  if [[ "$BAT_STATUS" = "Charging" ]] || [[ "$BAT_STATUS" = "Full" ]]; then \
+    echo "suspend-sedation: Woke up, no alarm set, but plugged in. Suspending..."; \
+    systemctl suspend; \
+  else \
+    echo "suspend-sedation: Woke up, no alarm set, and unplugged. Hibernating..."; \
+    systemctl hibernate; \
+  fi \
+else \
+  echo "suspend-sedation: Woke up before alarm - normal wakeup."; \
+  /usr/sbin/rtcwake --auto --mode disable; \
+fi \
+'
+
+[Install]
+WantedBy=sleep.target
