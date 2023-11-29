@@ -25,7 +25,7 @@ ExecStart=/usr/sbin/rtcwake --seconds $ALARM_SEC --auto --mode no
 ExecStop=/bin/sh -c '\
 sleep 3; \
 ALARM=$(cat $WAKEALARM); \
-NOW=$(date +%s); \
+NOW=$(date +%%s); \
 BATRY=$(echo /sys/class/power_supply/BAT*); \
 BAT_STATUS=$(tail "$BATRY/status"); \
 if [ -z "$ALARM" ] || [ "$NOW" -ge "$ALARM" ]; then \
